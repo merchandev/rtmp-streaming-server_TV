@@ -4,10 +4,6 @@ services:
     container_name: professional_stream_server
     ports:
       - "1935:1935" # RTMP Ingest from OBS
-      - "80:80"     # HTTP for Web/HLS
-      - "443:443"   # HTTPS
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./web:/usr/share/nginx/html
-      - ./ssl:/etc/nginx/ssl # Volume for SSL certificates
+      - "80:80" # HTTP for Web/HLS
+      - "443:443" # HTTPS
     restart: always

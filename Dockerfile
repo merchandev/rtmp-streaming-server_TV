@@ -18,6 +18,7 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
 # Copy Nginx configuration
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY web /usr/share/nginx/html
+COPY ssl /etc/nginx/ssl
 
 # Expose RTMP and HTTP ports
 EXPOSE 1935 80 443
