@@ -12,17 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let hls;
 
-    // HLS Source URL - Use relative path for production
-    // The previous Nginx Config sets up /hls/stream_name.m3u8 (master playlist)
-    // The user will stream to key "mystream" for example.
-    // We'll try to detect the stream name or default to 'test'.
-    // Important: In a real app this might be dynamic. We will assume 'live' application and 'test' key or generic master.
-    // Based on nginx.conf: `http://localhost/hls/$name.m3u8` is NOT directly automatic unless we know $name.
-    // BUT! Nginx RTMP with HLS enabled usually generates the m3u8 at /tmp/hls/$name.m3u8
-    // We need a stable URL. If we stream to key "stream", output is "stream.m3u8".
-    // We will hardcode to look for 'stream.m3u8' by default, or ask user to provide key. 
-    // For this template, we'll set it to 'stream.m3u8'. User needs to stream with key 'stream'.
-    const streamKey = 'stream';
+    // URL Parameter logic to allow user to specify stream key
+    // Example: domain.com/?s=mystream
+    const urlParams = new URLSearchParams(window.location.search);
+    const streamKey = urlParams.get('s') || 'stream'; // Default to 'stream' if not provided
+
+    console.log("Playing stream key:", streamKey);
     const source = `/hls/${streamKey}.m3u8`;
 
     // Initialize HLS
