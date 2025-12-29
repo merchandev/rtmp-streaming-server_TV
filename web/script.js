@@ -31,16 +31,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             statusElement.innerText = "Scanning for active streams...";
             const response = await fetch('/stat');
             const text = await response.text();
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(text, "text/xml");
+            console.log("Stat response received. Size:", text.length);
 
-            // Look for <application><name>live</name>...<stream><name>KEY</name>
-            const activeStreams = xmlDoc.querySelectorAll('application[name="live"] stream name');
-            if (activeStreams.length > 0) {
-                // Pick the first active stream
-                const foundKey = activeStreams[0].textContent;
-                console.log("Auto-detected stream:", foundKey);
+            // Regex is often more robust than DOMParser for simple XML extraction in these cases
+            // We look for the stream name specifically within the active stream context
+            // Structure: <application><name>live</name>...<stream><name>STREAM_KEY</name>
+
+            // Simple approach: Find first <name> after <live> tag (simplified)
+            // Or just find any <name> that isn't "live" (the app name)
+            const match = text.match(/<stream>\s*<name>([^<]+)<\/name>/);
+
+            if (match && match[1]) {
+                const foundKey = match[1];
+                console.log("Auto-detected stream (Regex):", foundKey);
                 return foundKey;
+            } else {
+                console.warn("No active stream found in /stat response. Content:", text.substring(0, 200));
             }
         } catch (e) {
             console.error("Auto-detect failed:", e);
