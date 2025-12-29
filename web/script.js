@@ -16,37 +16,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     let streamKey = urlParams.get('s');
 
-    const statusElement = document.createElement('div');
-    Object.assign(statusElement.style, {
-        position: 'absolute', top: '10px', left: '10px',
-        color: 'rgba(255, 255, 255, 0.5)', zIndex: '1000', fontFamily: 'monospace'
-    });
-    document.body.appendChild(statusElement);
+    // Debug removed for production
+    // const statusElement = ... 
 
     async function getActiveStreamKey() {
-        if (streamKey) return streamKey; // Use URL param if forced
+        if (streamKey) return streamKey;
 
         try {
-            console.log("Attempting to auto-detect active stream...");
-            statusElement.innerText = "Scanning for active streams...";
+            console.log("Scanning for active streams...");
             const response = await fetch('/stat');
             const text = await response.text();
-            console.log("Stat response received. Size:", text.length);
 
-            // Regex is often more robust than DOMParser for simple XML extraction in these cases
-            // We look for the stream name specifically within the active stream context
-            // Structure: <application><name>live</name>...<stream><name>STREAM_KEY</name>
-
-            // Simple approach: Find first <name> after <live> tag (simplified)
-            // Or just find any <name> that isn't "live" (the app name)
             const match = text.match(/<stream>\s*<name>([^<]+)<\/name>/);
 
             if (match && match[1]) {
                 const foundKey = match[1];
-                console.log("Auto-detected stream (Regex):", foundKey);
+                console.log("Auto-detected stream:", foundKey);
                 return foundKey;
-            } else {
-                console.warn("No active stream found in /stat response. Content:", text.substring(0, 200));
             }
         } catch (e) {
             console.error("Auto-detect failed:", e);
@@ -55,8 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     streamKey = await getActiveStreamKey();
-    statusElement.innerText = `Active Channel: ${streamKey}`;
-    console.log("Final target stream key:", streamKey);
+    console.log("Playing:", streamKey);
     const source = `/hls/${streamKey}.m3u8`;
 
     // --- INITIALIZE HLS ---

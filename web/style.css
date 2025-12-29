@@ -1,8 +1,11 @@
 :root {
     --primary-color: #ffffff;
     --accent-color: #00d2ff;
-    --glass-bg: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    --surface: rgba(255, 255, 255, 0.05);
+    --border: rgba(255, 255, 255, 0.1);
+    --text: #ffffff;
+    --text-muted: rgba(255, 255, 255, 0.6);
+    --warning: #ff3b30; /* Red for live */
     --glass-highlight: rgba(255, 255, 255, 0.2);
     --blur: 20px;
 }
