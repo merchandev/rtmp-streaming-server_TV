@@ -22,61 +22,57 @@
 
     <div class="container">
         <header>
-            <div class="live-indicator">
-                <div class="dot"></div> EN VIVO
-            </div>
             <!-- Logo replacement -->
             <img src="https://monagasvision.com/wp-content/uploads/2024/07/MONAGAS-VISION-SONORA-VERSION-MOVIL.png"
                 alt="Monagas Visión" class="channel-logo">
         </header>
 
         <div class="player-wrapper glassware">
-            <video id="video"
-                poster="https://monagasvision.com/wp-content/uploads/2024/07/MONAGAS-VISION-SONORA-VERSION-MOVIL.png"
-                playsinline></video>
+            <video id="video" playsinline></video>
 
             <div class="controls hide" id="controls">
                 <!-- Progress Line (Live streams usually don't have seek, but just purely for buffer viz or decoration) -->
                 <div class="progress-container">
                     <div class="buffer-bar"></div>
-                </div>
 
-                <div class="buttons">
-                    <div class="left-controls">
-                        <button id="playPauseBtn" class="control-btn"><i class="ph-fill ph-play"></i></button>
-                        <button id="reloadBtn" class="control-btn" title="Recargar"><i
-                                class="ph-bold ph-arrows-clockwise"></i></button>
-                        <div class="volume-container">
-                            <button id="muteBtn" class="control-btn"><i class="ph-fill ph-speaker-high"></i></button>
-                            <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1">
-                        </div>
-                        <span class="time-display">DIFUSIÓN</span>
-                    </div>
-
-                    <div class="right-controls">
-                        <!-- Quality Selector Hidden because we only have 1 bitrate now -->
-                        <div class="quality-selector" style="display: none;">
-                            <button id="qualityBtn" class="control-btn text-btn">Auto</button>
-                            <div class="quality-menu glassware hidden" id="qualityMenu">
-                                <!-- Populated by JS -->
+                    <div class="buttons">
+                        <div class="left-controls">
+                            <button id="playPauseBtn" class="control-btn"><i class="ph-fill ph-play"></i></button>
+                            <button id="reloadBtn" class="control-btn" title="Recargar"><i
+                                    class="ph-bold ph-arrows-clockwise"></i></button>
+                            <div class="volume-container">
+                                <button id="muteBtn" class="control-btn"><i
+                                        class="ph-fill ph-speaker-high"></i></button>
+                                <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1">
                             </div>
+                            <span class="time-display">DIFUSIÓN</span>
                         </div>
-                        <button id="fullscreenBtn" class="control-btn"><i class="ph-fill ph-corners-out"></i></button>
+
+                        <div class="right-controls">
+                            <!-- Quality Selector Hidden because we only have 1 bitrate now -->
+                            <div class="quality-selector" style="display: none;">
+                                <button id="qualityBtn" class="control-btn text-btn">Auto</button>
+                                <div class="quality-menu glassware hidden" id="qualityMenu">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                            <button id="fullscreenBtn" class="control-btn"><i
+                                    class="ph-fill ph-corners-out"></i></button>
+                        </div>
                     </div>
+                </div>
+
+                <div class="loading-overlay" id="loadingOverlay">
+                    <div class="spinner"></div>
                 </div>
             </div>
 
-            <div class="loading-overlay" id="loadingOverlay">
-                <div class="spinner"></div>
-            </div>
+            <footer class="glassware">
+                <p>Servicio de Streaming Epsressivo Venezuela para Monagas Visión</p>
+            </footer>
         </div>
 
-        <footer class="glassware">
-            <p>Servicio de Streaming Epsressivo Venezuela para Monagas Visión</p>
-        </footer>
-    </div>
-
-    <script src="script.js"></script>
+        <script src="script.js"></script>
 </body>
 
 </html>
