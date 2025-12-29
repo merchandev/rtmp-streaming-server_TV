@@ -280,16 +280,25 @@ video {
 }
 
 .channel-logo {
-    height: 40px;
-    /* Smaller logo as requested */
+    height: 80px;
+    /* Increased size as requested */
     width: auto;
     object-fit: contain;
     display: block;
     margin: 0 auto;
-    /* Center the logo if needed, or keep left? Standard header flex usually centers or spaces. Let's stick to flex logic */
 }
 
-/* Loading Overlay */
+/* Footer style */
+footer {
+    padding: 1rem 2rem;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    /* Increased brightness */
+    text-align: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
 .loading-overlay {
     position: absolute;
     top: 0;
@@ -353,6 +362,10 @@ footer {
 
     #volumeSlider {
         display: none;
-        /* Hide slider on mobile to save space, usually rely on phone hardware volume */
+    }
+
+    .channel-logo {
+        height: 60px;
+        /* Mobile size adjustment */
     }
 }
