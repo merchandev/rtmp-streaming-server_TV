@@ -8,8 +8,9 @@ RUN apk add --no-cache \
     openssl
 
 # Create directories for HLS fragments and playlists
-RUN mkdir -p /tmp/hls && \
-    chmod -R 777 /tmp/hls
+# Create directories for HLS fragments in web root to simplify access
+RUN mkdir -p /usr/share/nginx/html/hls && \
+    chmod -R 777 /usr/share/nginx/html/hls
 
 # Forward access and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
