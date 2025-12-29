@@ -17,6 +17,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const streamKey = urlParams.get('s') || 'stream'; // Default to 'stream' if not provided
 
+    // Update a visible element on the page with the stream key being used
+    const statusElement = document.createElement('div');
+    statusElement.style.position = 'absolute';
+    statusElement.style.top = '10px';
+    statusElement.style.left = '10px';
+    statusElement.style.color = 'rgba(255, 255, 255, 0.5)';
+    statusElement.style.zIndex = '1000';
+    statusElement.style.fontFamily = 'monospace';
+    statusElement.innerText = `Target Stream Key: ${streamKey}`;
+    document.body.appendChild(statusElement);
+
     console.log("Playing stream key:", streamKey);
     const source = `/hls/${streamKey}.m3u8`;
 
