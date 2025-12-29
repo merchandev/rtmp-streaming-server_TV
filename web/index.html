@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professional Live Stream</title>
-    <!-- Phosphor Icons -->
+    <!-- Favicon (Use emoji for simplicity or link to file) -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔴</text></svg>">
+
+    <!-- Phosphor Icons (CSS version for better compatibility) -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Fallback or ensure verify -->
     <!-- Hls.js -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <div class="background-glob"></div>
@@ -24,8 +31,9 @@
         </header>
 
         <div class="player-wrapper glassware">
-            <video id="video" poster="https://via.placeholder.com/1920x1080/000000/FFFFFF/?text=Stream+Offline" playsinline></video>
-            
+            <video id="video" poster="https://via.placeholder.com/1920x1080/000000/FFFFFF/?text=Stream+Offline"
+                playsinline></video>
+
             <div class="controls hide" id="controls">
                 <!-- Progress Line (Live streams usually don't have seek, but just purely for buffer viz or decoration) -->
                 <div class="progress-container">
@@ -35,7 +43,8 @@
                 <div class="buttons">
                     <div class="left-controls">
                         <button id="playPauseBtn" class="control-btn"><i class="ph-fill ph-play"></i></button>
-                        <button id="reloadBtn" class="control-btn" title="Reload Stream"><i class="ph-bold ph-arrows-clockwise"></i></button>
+                        <button id="reloadBtn" class="control-btn" title="Reload Stream"><i
+                                class="ph-bold ph-arrows-clockwise"></i></button>
                         <div class="volume-container">
                             <button id="muteBtn" class="control-btn"><i class="ph-fill ph-speaker-high"></i></button>
                             <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1">
@@ -54,7 +63,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="loading-overlay" id="loadingOverlay">
                 <div class="spinner"></div>
             </div>
@@ -67,4 +76,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

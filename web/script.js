@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const video = document.getElementById('video');
     const controls = document.getElementById('controls');
     const playPauseBtn = document.getElementById('playPauseBtn');
@@ -12,26 +12,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let hls;
 
-    // URL Parameter logic to allow user to specify stream key
-    // Example: domain.com/?s=mystream
+    // --- AUTO DETECT STREAM KEY ---
     const urlParams = new URLSearchParams(window.location.search);
-    const streamKey = urlParams.get('s') || 'stream'; // Default to 'stream' if not provided
+    let streamKey = urlParams.get('s');
 
-    // Update a visible element on the page with the stream key being used
     const statusElement = document.createElement('div');
-    statusElement.style.position = 'absolute';
-    statusElement.style.top = '10px';
-    statusElement.style.left = '10px';
-    statusElement.style.color = 'rgba(255, 255, 255, 0.5)';
-    statusElement.style.zIndex = '1000';
-    statusElement.style.fontFamily = 'monospace';
-    statusElement.innerText = `Target Stream Key: ${streamKey}`;
+    Object.assign(statusElement.style, {
+        position: 'absolute', top: '10px', left: '10px',
+        color: 'rgba(255, 255, 255, 0.5)', zIndex: '1000', fontFamily: 'monospace'
+    });
     document.body.appendChild(statusElement);
 
-    console.log("Playing stream key:", streamKey);
+    async function getActiveStreamKey() {
+        if (streamKey) return streamKey; // Use URL param if forced
+
+        try {
+            console.log("Attempting to auto-detect active stream...");
+            statusElement.innerText = "Scanning for active streams...";
+            const response = await fetch('/stat');
+            const text = await response.text();
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(text, "text/xml");
+
+            // Look for <application><name>live</name>...<stream><name>KEY</name>
+            const activeStreams = xmlDoc.querySelectorAll('application[name="live"] stream name');
+            if (activeStreams.length > 0) {
+                // Pick the first active stream
+                const foundKey = activeStreams[0].textContent;
+                console.log("Auto-detected stream:", foundKey);
+                return foundKey;
+            }
+        } catch (e) {
+            console.error("Auto-detect failed:", e);
+        }
+        return 'stream'; // Fallback
+    }
+
+    streamKey = await getActiveStreamKey();
+    statusElement.innerText = `Active Channel: ${streamKey}`;
+    console.log("Final target stream key:", streamKey);
     const source = `/hls/${streamKey}.m3u8`;
 
-    // Initialize HLS
+    // --- INITIALIZE HLS ---
     if (Hls.isSupported()) {
         hls = new Hls({
             capLevelToPlayerSize: true, // Auto quality selection optimization
@@ -44,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Manifest parsed, found " + data.levels.length + " quality levels");
             generateQualityLevels(data.levels);
             loadingOverlay.classList.remove('visible');
+            video.play().catch(e => console.log("Auto-play prevented:", e));
         });
 
         hls.on(Hls.Events.ERROR, function (event, data) {
@@ -77,6 +100,9 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         // Native HLS support (Safari)
         video.src = source;
+        video.addEventListener('loadedmetadata', () => {
+            video.play();
+        });
     }
 
     // Controls Logic
