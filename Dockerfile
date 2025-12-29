@@ -21,8 +21,12 @@ COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY web /usr/share/nginx/html
 COPY ssl /etc/nginx/ssl
 
+# Copy entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 # Expose RTMP and HTTP ports
 EXPOSE 1935 80 443
 
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start Nginx via entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
