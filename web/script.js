@@ -27,12 +27,21 @@ document.addEventListener('DOMContentLoaded', async () => {
             const response = await fetch('/stat');
             const text = await response.text();
 
-            const match = text.match(/<stream>\s*<name>([^<]+)<\/name>/);
+            // Regex now matches <stream> ... (any content) ... <name>KEY</name>
+            // [\s\S]*? matches any character including newlines, non-greedy
+            const match = text.match(/<application\s+name="live">[\s\S]*?<stream>[\s\S]*?<name>([^<]+)<\/name>/);
 
             if (match && match[1]) {
                 const foundKey = match[1];
                 console.log("Auto-detected stream:", foundKey);
                 return foundKey;
+            } else {
+                // Fallback: Try simpler regex in case application tag structure differs
+                const simpleMatch = text.match(/<stream>[\s\S]*?<name>([^<]+)<\/name>/);
+                if (simpleMatch && simpleMatch[1]) {
+                    console.log("Auto-detected stream (simple match):", simpleMatch[1]);
+                    return simpleMatch[1];
+                }
             }
         } catch (e) {
             console.error("Auto-detect failed:", e);
