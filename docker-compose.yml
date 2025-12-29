@@ -1,7 +1,7 @@
 services:
   stream-server:
     build: .
-    container_name: professional_stream_server
+    container_name: mv-streaming
     ports:
       - "1935:1935" # RTMP Ingest from OBS
       - "80:80" # HTTP for Web/HLS
