@@ -6,6 +6,4 @@ services:
       - "1935:1935" # RTMP Ingest from OBS
       - "80:80" # HTTP for Web/HLS
       - "443:443" # HTTPS
-    volumes:
-      - /etc/letsencrypt:/etc/letsencrypt:ro # Mount SSL certs from Host
     restart: always
