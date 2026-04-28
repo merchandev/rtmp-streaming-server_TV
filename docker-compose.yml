@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  stream-server:
+    build: .
+    container_name: mv-streaming
+    environment:
+      # SSL_DOMAIN ya no es usado activamente, Traefik gestiona el SSL
+      - SSL_DOMAIN=tv.monagasvision.com
+    ports:
+      - "1935:1935"   # ✅ RTMP — OBS/encoders se conectan aquí directamente
+      # 80:80  → ELIMINADO (Traefik lo gestiona)
+      # 443:443 → ELIMINADO (Traefik lo gestiona)
+    restart: always
+    volumes:
+      - hls-data:/tmp/hls
+      # /etc/letsencrypt → ELIMINADO (Traefik gestiona los certificados)
+    labels:
+      # --- Habilitar Traefik para este contenedor ---
+      - "traefik.enable=true"
+
+      # --- Router HTTPS (websecure) ---
+      - "traefik.http.routers.tv-stream.rule=Host(`tv.monagasvision.com`)"
+      - "traefik.http.routers.tv-stream.entrypoints=websecure"
+      - "traefik.http.routers.tv-stream.tls=true"
+      - "traefik.http.routers.tv-stream.tls.certresolver=letsencrypt"
+
+      # --- Servicio: puerto interno donde escucha nginx del contenedor ---
+      - "traefik.http.services.tv-stream.loadbalancer.server.port=80"
+
+      # --- Router HTTP (web) — redirige a HTTPS via middleware global ---
+      - "traefik.http.routers.tv-stream-http.rule=Host(`tv.monagasvision.com`)"
+      - "traefik.http.routers.tv-stream-http.entrypoints=web"
+      - "traefik.http.routers.tv-stream-http.middlewares=redirect-to-https@docker"
+    networks:
+      - traefik-net
+
+volumes:
+  hls-data:
+
+networks:
+  traefik-net:
+    external: true
