@@ -4,8 +4,7 @@ FROM alpine:latest
 # openssl ELIMINADO — Traefik gestiona los certificados SSL
 RUN apk add --no-cache \
     nginx \
-    nginx-mod-rtmp \
-    ffmpeg
+    nginx-mod-rtmp
 
 # Crear directorio para fragmentos HLS
 RUN mkdir -p /usr/share/nginx/html/hls && \
