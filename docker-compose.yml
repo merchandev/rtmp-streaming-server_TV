@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   stream-server:
     build: .
@@ -30,7 +28,6 @@ services:
 
       # --- Router HTTP (web) — redirige a HTTPS via middleware global ---
       - "traefik.http.routers.tv-stream-http.rule=Host(`tv.monagasvision.com`)"
-      - "traefik.http.routers.tv-stream-http.entrypoints=web"
       - "traefik.http.routers.tv-stream-http.entrypoints=web"
     networks:
       - traefik-net
